@@ -1,32 +1,41 @@
+package nNucleotideFreqAnalysis;
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
 
 public class TextInput {
-	private static String output;
-	public static void main(String [] args) {
-		Scanner keyboard = new Scanner(System.in);
+	private String output;
+	
+	public void parseString() {
+		Scanner sc = new Scanner(System.in);
+		BufferedReader br = null;
 		System.out.print("Enter file: ");
-		String file = keyboard.nextLine();
+		String file = sc.nextLine();
+		sc.close();
 		try {
-			Scanner in = new Scanner(new FileInputStream(file));
+			br = new BufferedReader(new FileReader(file));
 			String result = "";
-			while (in.hasNextLine()) {
-				result+=in.nextLine()+"\n";
+			while (br.readLine() != null) {
+				result+=br.readLine();
 			}
 			result = result.trim().toUpperCase();
-			in.close();
+			br.close();
 			output = result;
 		}
 		catch (FileNotFoundException e) {
 			System.out.println("Had problem with file IO");
 			System.out.println(e.getMessage());
 		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 		finally {
-			System.out.print(output);
 		}
 	}
 	
