@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class TextInput {
 	private String output;
 	
-	public void parseString() {
+	public TextInput() {
 		Scanner sc = new Scanner(System.in);
 		BufferedReader br = null;
 		System.out.print("Enter file: ");
@@ -21,10 +21,16 @@ public class TextInput {
 		try {
 			br = new BufferedReader(new FileReader(file));
 			String result = "";
-			while (br.readLine() != null) {
-				result+=br.readLine();
+			boolean keepIterating = true;
+			while (keepIterating) {
+				String line = br.readLine();
+				result+=line;
+				System.out.println(result.length());
+				if (line == null) {
+					keepIterating = false;
+				}
 			}
-			result = result.trim().toUpperCase();
+			System.out.println(result.length());
 			br.close();
 			output = result;
 		}
@@ -37,6 +43,10 @@ public class TextInput {
 		}
 		finally {
 		}
+	}
+
+	String getGenome() {
+		return output;
 	}
 	
 }
