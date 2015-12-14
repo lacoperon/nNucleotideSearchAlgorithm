@@ -17,6 +17,9 @@ public class freqAnalysis {
 	//Constant for the segment length
 	private static final int SEGMENT_LENGTH = 1000;
 	static final int MONO = 0;
+	static final int DI = 1;
+	static final int TRI = 2;
+	static final int TETRA = 3;
 
 	//Creates an ArrayList of segment-indexed ArrayLists that will contain ArrayLists of frequencies
 	//associated with different nNucleotide Frequency Analyses (FreqType/Segment/FreqOfGivenThing)
@@ -39,7 +42,7 @@ public class freqAnalysis {
 		int segmentNumber = genome.length()/SEGMENT_LENGTH;
 		System.out.println("There will be " + segmentNumber + " segments to import");
 		for (int i=0; i < segmentNumber; i++) {
-			genomeSegments.add(genome.substring(i*1000,SEGMENT_LENGTH+1000*i));
+			genomeSegments.add(genome.substring(i*SEGMENT_LENGTH,SEGMENT_LENGTH+SEGMENT_LENGTH*i));
 			System.out.printf("Segmented region %d %n", i);
 		}
 	}
@@ -85,9 +88,12 @@ public class freqAnalysis {
 			monoFreq.add(mononucleoCounter(segment));
 		}
 		segmentedTypedFreqList.add(MONO, monoFreq);
-		System.out.println(segmentedTypedFreqList);
+		System.out.println("Mononucleotide Frequencies Calculated!");
 	}
-
+	/**
+	 * Getter for the segmented genome
+	 * @return
+	 */
 	public ArrayList<String> getGenomeSegments() {
 		return genomeSegments;
 	}
@@ -107,7 +113,7 @@ public class freqAnalysis {
 	/**
 	 * Calculates average frequencies of nnucleotideFrequencies
 	 * @param inputArrayofArray
-	 * @return
+	 * @return averageFreqs array
 	 */
 	public ArrayList<Double> calculateAverageFreqs(ArrayList<ArrayList<Double>> inputArrayofArray) {
 		ArrayList<Double> averageFreqs = new ArrayList<Double>();
@@ -117,26 +123,43 @@ public class freqAnalysis {
 		for (int i=0; i < length; i++) {
 			averageFreqs.add((double) 0);
 		}
-
+		//Sums up the segment values for a statistic across all segments
 		for (ArrayList<Double> segmentStat : inputArrayofArray) {
 			for (int i=0; i < segmentStat.size(); i++) {
 				averageFreqs.set(i, averageFreqs.get(i) + segmentStat.get(i));
 			}
 		}
-		
+
+		//Divides the sum of the segment values for a given statistic by the number of segments
+		// >>> IE getting the averageFreqs
 		for (int i=0; i < averageFreqs.size(); i++) {
 			double stat = averageFreqs.get(i);
 			stat = stat / inputArrayofArray.size();
 			averageFreqs.set(i, stat);
 		}
-		
-		System.out.println(averageFreqs);
 		return averageFreqs;
-
-
 	}
-
-
-
+	
+	
+	/**
+	 * Calculates the standard deviations 
+	 * @param arrayofArrays
+	 * @return standardDevsArray
+	 */
+	public ArrayList<Double> calculateStandardDeviationArray(ArrayList<ArrayList<Double>> inputArrayofArray) {
+		//Gets the number of statistics in an array for a given segment
+		int length = inputArrayofArray.get(0).size();
+		//Loops through each statistic, calcuating the average value at each point
+		for (int i=0; i<length; i++) {
+			
+		}
+		
+		return null;
+	}
 }
+
+
+
+
+
 
