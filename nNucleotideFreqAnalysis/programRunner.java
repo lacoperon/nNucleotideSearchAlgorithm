@@ -9,6 +9,7 @@ public class programRunner {
 		String genome = input.getGenome();
 		freqAnalysis freq = new freqAnalysis(genome);
 		freq.doMonoFreqCalculations();
+		freq.calculateAverageFreqs(freq.segmentedTypedFreqList.get(freq.MONO));
 	}
 
 }
