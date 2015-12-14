@@ -1,11 +1,5 @@
 package nNucleotideFreqAnalysis;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * 
@@ -20,6 +14,13 @@ public class freqAnalysis {
 	static final int DI = 1;
 	static final int TRI = 2;
 	static final int TETRA = 3;
+	static String[] baseNucleotideOptions = {"A","T","C","G"};
+	static String[] diNucleotideOptions = addPowerNucleotide(baseNucleotideOptions);
+	static String[] triNucleotideOptions = addPowerNucleotide(diNucleotideOptions);
+	static String[] tetraNucleotideOptions = addPowerNucleotide(triNucleotideOptions);
+
+	//instance variable for number of segments in a genome
+	private int segmentNumber;
 
 	//Creates an ArrayList of segment-indexed ArrayLists that will contain ArrayLists of frequencies
 	//associated with different nNucleotide Frequency Analyses (FreqType/Segment/FreqOfGivenThing)
@@ -39,48 +40,129 @@ public class freqAnalysis {
 	 * @param genome
 	 */
 	public void partSegmenter(String genome) {
-		int segmentNumber = genome.length()/SEGMENT_LENGTH;
+		segmentNumber = genome.length()/SEGMENT_LENGTH;
 		System.out.println("There will be " + segmentNumber + " segments to import");
 		for (int i=0; i < segmentNumber; i++) {
 			genomeSegments.add(genome.substring(i*SEGMENT_LENGTH,SEGMENT_LENGTH+SEGMENT_LENGTH*i));
-			System.out.printf("Segmented region %d %n", i);
+			System.out.printf("Segmented region %d %n", i+1);
 		}
 	}
 	/**
-	 * Regular GC Counter; returns an array of length 2
-	 * The first entry is the GC-content, the second entry is the AT-content
+	 * ATCG Counter; returns an array of length 4
+	 * The first entry is the A-content, the second entry is the T-content, 
+	 * the third entry is the C-content, the fourth entry is the G-content
 	 * @param segment
-	 * @return
+	 * @return prevalence of given nucleotide sequences for a given segment
 	 */
 	public ArrayList<Double> mononucleoCounter(String segment) {
 		ArrayList<Double> mono = new ArrayList<Double>();
-		String[] option = { "A","C"};
-		int atCount = 0;
-		int gcCount = 0;
-		segment = segment.replaceAll("T", "A");
-		segment = segment.replaceAll("G", "C");
+		String[] option = { "A","T","C","G"};
+		double[] optionCount = { 0, 0, 0, 0};
 
-		//Iterates through each segment, and calculates both GC and AT count from that
+		//Iterates through each segment, and calculates the A,T,C,G count from that
 		for (int i=0; i<SEGMENT_LENGTH; i++) {
 			String letter = segment.substring(i, i+1);
-			if(letter.equals(option[0])) {
-				atCount++;
-			}
-			else if(letter.equals(option[1])) {
-				gcCount++;
-			}
+			for(int j=0; j < option.length; j++) {
+				if(letter.equals(option[j])) {
+					optionCount[j]++;
+				}
+			}	
 		}
-		//Sets the 0th element in the Mononucleotide Frequency ArrayList to be gcCount percentage
-		double gcCountDecimal = ((double)gcCount)/SEGMENT_LENGTH;
-		mono.add(0, gcCountDecimal);
-
-		//Sets the 1st element in the Mononucleotide Frequency ArrayList to be atCount percentage
-		double atCountPercentage = ((double) atCount) / SEGMENT_LENGTH;
-		mono.add(1, atCountPercentage);
+		//Sets the jth element in the Mononucleotide Frequency ArrayList to be the option[j] percentage
+		for (int j=0; j<option.length; j++) {
+			double countDecimal = (optionCount[j])/SEGMENT_LENGTH;
+			mono.add(j, countDecimal);
+		}
 		return mono;
 	}
 	/**
-	 * Does MonoFrequency calculations as in monoNucleoCounter(), and adds the result to the segmentedTypedFreqList
+	 * Dinucleotide Counter; returns an array of length 16
+	 * @param segment
+	 * @return prevalence of given nucleotide sequences for a given segment
+	 */
+	public ArrayList<Double> dinucleoCounter(String segment) {
+		ArrayList<Double> di = new ArrayList<Double>();
+		String[] option = diNucleotideOptions;
+		double[] optionCount = new double[option.length];
+		for (double number : optionCount) {
+			number = 0;
+		}
+		//Iterates through each segment, and calculates the count for each option from that
+		for (int i=0; i<(SEGMENT_LENGTH - DI); i++) {
+			String letter = segment.substring(i, i+2);
+			for(int j=0; j < option.length; j++) {
+				if(letter.equals(option[j])) {
+					optionCount[j]++;
+				}
+			}	
+		}
+		//Sets the jth element in the Dinucleotide Frequency ArrayList to be the option[j] percentage
+		for (int j=0; j<option.length; j++) {
+			double countDecimal = (optionCount[j])/(SEGMENT_LENGTH-DI);
+			di.add(j, countDecimal);
+		}
+		return di;
+
+	}
+	/**
+	 * Trinucleotide Counter; returns an array of length 64
+	 * @param segment
+	 * @return prevalence of given nucleotide sequences for a given segment
+	 */
+	public ArrayList<Double> trinucleoCounter(String segment) {
+		ArrayList<Double> tri = new ArrayList<Double>();
+		String[] option = triNucleotideOptions;
+		double[] optionCount = new double[option.length];
+		for (double number : optionCount) {
+			number = 0;
+		}
+		//Iterates through each segment, and calculates the count for each option from that
+		for (int i=0; i<(SEGMENT_LENGTH - TRI); i++) {
+			String letter = segment.substring(i, i+3);
+			for(int j=0; j < option.length; j++) {
+				if(letter.equals(option[j])) {
+					optionCount[j]++;
+				}
+			}	
+		}
+		//Sets the jth element in the Trinucleotide Frequency ArrayList to be the option[j] percentage
+		for (int j=0; j<option.length; j++) {
+			double countDecimal = (optionCount[j])/(SEGMENT_LENGTH-TRI);
+			tri.add(j, countDecimal);
+		}
+		return tri;
+
+	}
+	/**
+	 * Tetranucleotide Counter; returns an array of length 256
+	 * @param segment
+	 * @return prevalence of given nucleotide sequences for a given segment
+	 */
+	public ArrayList<Double> tetranucleoCounter(String segment) {
+		ArrayList<Double> tetra = new ArrayList<Double>();
+		String[] option = tetraNucleotideOptions;
+		double[] optionCount = new double[option.length];
+		for (double number : optionCount) {
+			number = 0;
+		}
+		//Iterates through each segment, and calculates the count for each option from that
+		for (int i=0; i<(SEGMENT_LENGTH - TETRA); i++) {
+			String letter = segment.substring(i, i+4);
+			for(int j=0; j < option.length; j++) {
+				if(letter.equals(option[j])) {
+					optionCount[j]++;
+				}
+			}	
+		}
+		//Sets the jth element in the tetranucleotide Frequency ArrayList to be the option[j] percentage
+		for (int j=0; j<option.length; j++) {
+			double countDecimal = (optionCount[j])/(SEGMENT_LENGTH-TETRA);
+			tetra.add(j, countDecimal);
+		}
+		return tetra;
+	}
+	/**
+	 * Does MonoFrequency calculations as in mononucleoCounter(), and adds the result to the segmentedTypedFreqList
 	 */
 	public void doMonoFreqCalculations() {
 		ArrayList<ArrayList<Double>> monoFreq = new ArrayList<ArrayList<Double>>();
@@ -90,6 +172,43 @@ public class freqAnalysis {
 		segmentedTypedFreqList.add(MONO, monoFreq);
 		System.out.println("Mononucleotide Frequencies Calculated!");
 	}
+
+	/**
+	 * Does DiFrequency calculations as in dinucleoCounter(), and adds the result to the segmentedTypedFreqList
+	 */
+	public void doDiFreqCalculations() {
+		ArrayList<ArrayList<Double>> diFreq = new ArrayList<ArrayList<Double>>();
+		for(String segment : genomeSegments) {
+			diFreq.add(dinucleoCounter(segment));
+		}
+		segmentedTypedFreqList.add(DI, diFreq);
+		System.out.println("Dinucleotide Frequencies Calculated!");
+
+	}
+	/**
+	 * Does TriFrequency calculations as in trinucleoCounter(), and adds the result to the segmentedTypedFreqList
+	 */
+	public void doTriFreqCalculations() {
+		ArrayList<ArrayList<Double>> triFreq = new ArrayList<ArrayList<Double>>();
+		for(String segment : genomeSegments) {
+			triFreq.add(trinucleoCounter(segment));
+		}
+		segmentedTypedFreqList.add(TRI, triFreq);
+		System.out.println("Trinucleotide Frequencies Calculated!");
+
+	}
+	/**
+	 * Does TetraFrequency calculations as in tetranucleoCounter(), and adds the result to the segmentedTypedFreqList
+	 */
+	public void doTetraFreqCalculations() {
+		ArrayList<ArrayList<Double>> tetraFreq = new ArrayList<ArrayList<Double>>();
+		for(String segment : genomeSegments) {
+			tetraFreq.add(tetranucleoCounter(segment));
+		}
+		segmentedTypedFreqList.add(TETRA, tetraFreq);
+		System.out.println("Tetranucleotide Frequencies Calculated!");
+	}
+
 	/**
 	 * Getter for the segmented genome
 	 * @return
@@ -139,22 +258,71 @@ public class freqAnalysis {
 		}
 		return averageFreqs;
 	}
-	
-	
+
+
 	/**
 	 * Calculates the standard deviations 
 	 * @param arrayofArrays
 	 * @return standardDevsArray
 	 */
-	public ArrayList<Double> calculateStandardDeviationArray(ArrayList<ArrayList<Double>> inputArrayofArray) {
+	public ArrayList<Double> calculateStandardDeviationArray(ArrayList<ArrayList<Double>> inputArrayofArray,
+			ArrayList<Double> averageFreqs) {
+		ArrayList<Double> stdDevFreqs = new ArrayList<Double>();
 		//Gets the number of statistics in an array for a given segment
 		int length = inputArrayofArray.get(0).size();
-		//Loops through each statistic, calcuating the average value at each point
+		//Loops through each statistic, adding an initial value of 0 for the Standard Deviation
 		for (int i=0; i<length; i++) {
-			
+			stdDevFreqs.add((double) 0);
 		}
-		
-		return null;
+		//For each segment, calculated the individual variance of statistics
+		for (ArrayList<Double> segmentStat : inputArrayofArray) {
+			for(int i=0; i < segmentStat.size(); i++) {
+				//adds the variance of a given statistic in a given segment to the stdDevFreq array,
+				//which at this point is the sum of the variances
+				stdDevFreqs.set(i, stdDevFreqs.get(i)+variance(averageFreqs.get(i), segmentStat.get(i)));
+			}
+		}
+
+		//Divides each entry in stdDevFreqs by the number of segments in the currently accessed genome
+		//And then takes the square root of that variance, yielding the true array of Standard Deviations
+		for (int i=0; i<stdDevFreqs.size(); i++) {
+			stdDevFreqs.set(i, stdDevFreqs.get(i)/segmentNumber);
+			stdDevFreqs.set(i, Math.sqrt(stdDevFreqs.get(i)));
+		}
+
+		return stdDevFreqs;
+	}
+	/**
+	 * Takes the average and the value at a point, and yields the variance
+	 * IE (average - pointValue)^2
+	 * @param average
+	 * @param pointValue
+	 * @return
+	 */
+	public static double variance(double average, double pointValue) {
+		double output = Math.pow((average - pointValue),2);
+		return output;
+	}
+	/**
+	 * Returns an array of all possible nucleotide combinations of a
+	 * nucleotides string of length nucleoNumber
+	 * @param nucleoNumber
+	 * @return nucleotidePermutations[]
+	 * 
+	 */
+	public static String[] addPowerNucleotide(String[] previousIteration) {
+		String[] baseNucleotideOptions = {"A","T","C","G"};
+		int previousLength = previousIteration.length;
+		int currentLength = previousLength*4;
+		String[] output = new String[currentLength];
+
+		for (int i=0; i<previousLength; i++) {
+			for (int j=0; j<4; j++) {
+				output[4*i+j] = previousIteration[i] + baseNucleotideOptions[j];
+			}
+		}
+		System.out.println(output);
+		return output;
 	}
 }
 
