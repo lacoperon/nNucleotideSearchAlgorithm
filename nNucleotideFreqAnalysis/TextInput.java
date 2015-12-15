@@ -12,8 +12,10 @@ public class TextInput {
 	public TextInput() {
 		Scanner sc = new Scanner(System.in);
 		BufferedReader br = null;
+		System.out.println("IMPORTING MAY TAKE A FEW MINUTES");
 		System.out.print("Enter file: ");
 		String file = sc.nextLine();
+		System.out.println("Importing in progress...");
 		sc.close();
 		try {
 			br = new BufferedReader(new FileReader(file));
@@ -22,8 +24,8 @@ public class TextInput {
 			while (keepIterating) {
 				String line = br.readLine();
 				result+=line;
-				System.out.println(result.length());
 				if (line == null) {
+					System.out.println("Finished importing!");
 					keepIterating = false;
 				}
 			}

@@ -14,6 +14,7 @@ public class freqAnalysis {
 	static final int DI = 1;
 	static final int TRI = 2;
 	static final int TETRA = 3;
+	static final double ZSCORE_THRESHOLD = 2;
 	static String[] baseNucleotideOptions = {"A","T","C","G"};
 	static String[] diNucleotideOptions = addPowerNucleotide(baseNucleotideOptions);
 	static String[] triNucleotideOptions = addPowerNucleotide(diNucleotideOptions);
@@ -41,10 +42,25 @@ public class freqAnalysis {
 	 */
 	public void partSegmenter(String genome) {
 		segmentNumber = genome.length()/SEGMENT_LENGTH;
-		System.out.println("There will be " + segmentNumber + " segments to import");
+		System.out.println("There will be " + segmentNumber + " segments made from the genome");
+		int quarterNumber = segmentNumber / 4;
+		int halfNumber = segmentNumber / 2;
+		int threeQuarterNumber = 3 * segmentNumber / 4;
 		for (int i=0; i < segmentNumber; i++) {
 			genomeSegments.add(genome.substring(i*SEGMENT_LENGTH,SEGMENT_LENGTH+SEGMENT_LENGTH*i));
-			System.out.printf("Segmented region %d %n", i+1);
+			if (i == quarterNumber) {
+				System.out.println("25% Done Segmenting...");
+			}
+			else if (i == halfNumber) {
+				System.out.println("50% Done Segmenting...");
+			}
+			else if (i == threeQuarterNumber) {
+				System.out.println("75% Done Segmenting...");
+			}
+			else if (i == (segmentNumber - 1)) {
+				System.out.println("Segmenting Done!");
+			}
+			
 		}
 	}
 	/**
@@ -313,16 +329,67 @@ public class freqAnalysis {
 	public static String[] addPowerNucleotide(String[] previousIteration) {
 		String[] baseNucleotideOptions = {"A","T","C","G"};
 		int previousLength = previousIteration.length;
-		int currentLength = previousLength*4;
+		int currentLength = previousLength*baseNucleotideOptions.length;
 		String[] output = new String[currentLength];
 
 		for (int i=0; i<previousLength; i++) {
-			for (int j=0; j<4; j++) {
-				output[4*i+j] = previousIteration[i] + baseNucleotideOptions[j];
+			for (int j=0; j<baseNucleotideOptions.length; j++) {
+				output[baseNucleotideOptions.length*i+j] = 
+						previousIteration[i] + baseNucleotideOptions[j];
 			}
 		}
-		System.out.println(output);
 		return output;
+	}
+	/**
+	 * Method that converts the average frequencies, the standard deviation of those frequencies
+	 * and a segmented arraylist of arraylists of freqencies into a segmented arralyist of arraylists of z-scores
+	 * @param averageFreqs
+	 * @param stdDevFreqs
+	 * @param nFreqs
+	 * @return zScoreArraylistofArraylist
+	 */
+	public static ArrayList<ArrayList<Double>> makeZScoreArray(ArrayList<Double> averageFreqs,
+			ArrayList<Double> stdDevFreqs, ArrayList<ArrayList<Double>> nFreqs) {
+		for (ArrayList<Double> segment : nFreqs) {
+			for(int i=0; i<segment.size(); i++) {
+				double pointValue = segment.get(i);
+				double average = averageFreqs.get(i);
+				double stdDev = stdDevFreqs.get(i);
+				double zScore = (pointValue - average) / stdDev;
+				segment.set(i, zScore);
+			}
+		}
+		System.out.println("Z Scoring Successful");
+		return nFreqs;
+	}
+	/**
+	 * Takes an ArrayList of Arraylists of zScores, and converts that into an Arraylist of
+	 * Z-score esque measures corresponding to each segment.
+	 * 
+	 * CALCULATED VIA AN AVERAGE OF THE ABSOLUTE Z-SCORES
+	 * 
+	 * @param nFreqZSegmentScores
+	 * @return
+	 */
+	public static ArrayList<Double> segmentScoreNFreq(ArrayList<ArrayList<Double>> nFreqZSegmentScores) {
+		ArrayList<Double> segmentScores = new ArrayList<Double>();
+		for (ArrayList<Double> segment : nFreqZSegmentScores) {
+			double score = 0;
+			for(Double zScore : segment) {
+				score += Math.abs(zScore);
+			}
+			score = score / segment.size();
+			segmentScores.add(score);
+		}
+		
+		//FINISH METHOD SO NOT JUST FOR GC CONTENT
+		for (int i=0; i < segmentScores.size(); i++) {
+			double score = segmentScores.get(i);
+			if (score > ZSCORE_THRESHOLD) {
+				System.out.printf("Look at segment number %d: has a score of %f%n", i, score);
+			}
+		}
+		return segmentScores;
 	}
 }
 
