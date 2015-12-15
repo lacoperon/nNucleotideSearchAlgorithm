@@ -392,9 +392,3 @@ public class freqAnalysis {
 		return segmentScores;
 	}
 }
-
-
-
-
-
-
