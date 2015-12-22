@@ -23,10 +23,9 @@ import javax.swing.JButton;
 public class GUI extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
 
 	/**
-	 * Launch the application.
+	 * The startup GUI of the nNFoGe algorithm
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -65,24 +64,37 @@ public class GUI extends JFrame {
 		
 		//Creates settingsPane, the JPanel with all of the settings for the nNFoGe Algorithm to use
 		JPanel settingsPane = new JPanel();
+		contentPane.add(settingsPane, BorderLayout.CENTER);
 		settingsPane.setLayout(new GridLayout(3,1));
+		
+		//Adds Program Description to 1st row of settingsPane
 		JLabel programDescription = new JLabel("Choose a nucleotide sequence (.txt) to analyse");
 		settingsPane.add(programDescription);
-		contentPane.add(settingsPane, BorderLayout.CENTER);
-		//Creates fileChooser, the JPanel for browsing files for the txt file to analyse
+		//Creates fileChooser, a JPanel within settingsPane for browsing files for the txt file to analyse. 
+		//Adds it to 2nd line of settingsPane
 		JPanel fileChooser = new JPanel();
 		settingsPane.add(fileChooser);
 		fileChooser.setLayout(new GridLayout(1,3));
-		textField = new JTextField("");
+		JTextField textField = new JTextField("");
 		fileChooser.add(new JLabel("Choose FASTA file:"));
-		textField.setColumns(4);
 		textField.setEditable(false);
-		
 		fileChooser.add(textField);
 		fileChooser.add(new JButton("Browse"));
+		
+		//Creates segmentPane, a JPanel within settingsPane for choosing what length you want the segments
+		//analysed to have
+		JPanel segmentPane = new JPanel();
+		settingsPane.add(segmentPane);
+		segmentPane.setLayout(new GridLayout(1,3));
+		segmentPane.add(new JLabel("Segment length:"));
+		JTextField segmentField = new JTextField("");
+		segmentPane.add(segmentField);
+		segmentPane.add(new JLabel(""));
 		JButton analyseButton = new JButton("Search");
 		contentPane.add(analyseButton, BorderLayout.SOUTH);	
 		
+		
+
 		
 	}
 
