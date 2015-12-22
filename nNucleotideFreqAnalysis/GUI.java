@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollBar;
 import javax.swing.JFileChooser;
 import javax.swing.JButton;
@@ -54,7 +55,7 @@ public class GUI extends JFrame implements ActionListener {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout());
 		setContentPane(contentPane);
-		
+
 		//Creates lblHello, the welcome text for the GUI
 		JLabel lblProgramName = new JLabel("nNucleotide Foreign Gene Search Algorithm");
 		Font largeFont = new Font("Times New Roman", Font.BOLD,18);
@@ -63,12 +64,12 @@ public class GUI extends JFrame implements ActionListener {
 		lblProgramName.setHorizontalAlignment(JLabel.CENTER);
 		//Adds lblHello to contentPane
 		contentPane.add(lblProgramName, BorderLayout.NORTH);
-		
+
 		//Creates settingsPane, the JPanel with all of the settings for the nNFoGe Algorithm to use
 		JPanel settingsPane = new JPanel();
 		contentPane.add(settingsPane, BorderLayout.CENTER);
 		settingsPane.setLayout(new GridLayout(3,1));
-		
+
 		//Adds Program Description to 1st row of settingsPane
 		JLabel programDescription = new JLabel("Choose a nucleotide sequence (.txt) to analyse");
 		settingsPane.add(programDescription);
@@ -82,7 +83,7 @@ public class GUI extends JFrame implements ActionListener {
 		textField.setEditable(false);
 		fileChooser.add(textField);
 		fileChooser.add(new JButton("Browse"));
-		
+
 		//Creates segmentPane, a JPanel within settingsPane for choosing what length you want the segments
 		//analysed to have
 		JPanel segmentPane = new JPanel();
@@ -93,7 +94,7 @@ public class GUI extends JFrame implements ActionListener {
 		segmentPane.add(segmentField);
 		segmentPane.add(new JLabel(""));
 		JButton analyseButton = new JButton("Search");
-		
+
 		//Adds ActionListener for analyseButton
 		analyseButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
@@ -103,9 +104,13 @@ public class GUI extends JFrame implements ActionListener {
 					int segmentNumber = Integer.parseInt(segmentInput);
 					//TODO: Pass segmentNumber into the program
 					System.out.println(segmentNumber + "is a number");
+					//TODO: Popup for non-existant file error
+					//TODO: Popup for too long segment length
 				}
 				catch(NumberFormatException e) {
-					//TODO: Popup for invalid input
+					//Popup for non-numerical input
+					JOptionPane.showMessageDialog(null, "You entered an invalid segment length" ,"Invalid Input", JOptionPane.PLAIN_MESSAGE);
+					parsable=false;
 					System.out.println(segmentInput + "is invalid");
 				}
 			}
@@ -116,9 +121,9 @@ public class GUI extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	public void tryAnalysis() {
 	}
 }
