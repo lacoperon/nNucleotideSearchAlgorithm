@@ -7,6 +7,8 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -20,7 +22,7 @@ import javax.swing.JScrollBar;
 import javax.swing.JFileChooser;
 import javax.swing.JButton;
 
-public class GUI extends JFrame {
+public class GUI extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 
@@ -91,11 +93,32 @@ public class GUI extends JFrame {
 		segmentPane.add(segmentField);
 		segmentPane.add(new JLabel(""));
 		JButton analyseButton = new JButton("Search");
+		
+		//Adds ActionListener for analyseButton
+		analyseButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				boolean parsable = true;
+				String segmentInput = segmentField.getText();
+				try {
+					int segmentNumber = Integer.parseInt(segmentInput);
+					//TODO: Pass segmentNumber into the program
+					System.out.println(segmentNumber + "is a number");
+				}
+				catch(NumberFormatException e) {
+					//TODO: Popup for invalid input
+					System.out.println(segmentInput + "is invalid");
+				}
+			}
+		});
 		contentPane.add(analyseButton, BorderLayout.SOUTH);	
-		
-		
-
-		
 	}
 
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void tryAnalysis() {
+	}
 }
