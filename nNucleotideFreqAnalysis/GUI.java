@@ -9,6 +9,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -80,6 +81,9 @@ public class GUI extends JFrame implements ActionListener {
 		fileChooser.setLayout(new GridLayout(1,3));
 		JTextField textField = new JTextField("");
 		fileChooser.add(new JLabel("Choose FASTA file:"));
+		/**
+		 * TEMPORARY SETTING EDITABLE TO TRUE FOR TESTING
+		 */
 		textField.setEditable(false);
 		fileChooser.add(textField);
 		fileChooser.add(new JButton("Browse"));
@@ -95,26 +99,39 @@ public class GUI extends JFrame implements ActionListener {
 		segmentPane.add(new JLabel(""));
 		JButton analyseButton = new JButton("Search");
 
-		//Adds ActionListener for analyseButton
+		//Adds ActionListener for the interface, around the analyseButton
 		analyseButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				boolean parsable = true;
 				String segmentInput = segmentField.getText();
 				try {
 					int segmentNumber = Integer.parseInt(segmentInput);
+					if (segmentNumber < 1) {
+						throw new NumberFormatException();
+					}
 					//TODO: Pass segmentNumber into the program
-					System.out.println(segmentNumber + "is a number");
-					//TODO: Popup for non-existant file error
-					//TODO: Popup for too long segment length
+					
+					//Checks to see if the txt file actually exists
+					//If yes, it's fine. If no, FileNotFoundException.
+					File f = new File(textField.getText());
+					if(!(f.exists()) || f.isDirectory()) { 
+					    throw new FileNotFoundException();
+					}
+					
+					
 				}
+				//If there is a NumberFormatException, the 
 				catch(NumberFormatException e) {
 					//Popup for non-numerical input
-					JOptionPane.showMessageDialog(null, "You entered an invalid segment length" ,"Invalid Input", JOptionPane.PLAIN_MESSAGE);
-					parsable=false;
-					System.out.println(segmentInput + "is invalid");
+					JOptionPane.showMessageDialog(null, "You entered an invalid segment length" ,
+							"Invalid Input", JOptionPane.PLAIN_MESSAGE);
+				}
+				catch(FileNotFoundException e) {
+					JOptionPane.showMessageDialog(null, "You entered an invalid file name" ,
+							"Invalid Input", JOptionPane.PLAIN_MESSAGE);
 				}
 			}
 		});
+		//Adds the analyseButton to the contentPane
 		contentPane.add(analyseButton, BorderLayout.SOUTH);	
 	}
 
@@ -123,7 +140,20 @@ public class GUI extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 
 	}
+	
+	class FileNotFoundException extends Exception
+	{
+	      //Parameterless Constructor
+	      public FileNotFoundException() {}
+
+	      //Constructor that accepts a message
+	      public FileNotFoundException(String message)
+	      {
+	         super(message);
+	      }
+	 }
 
 	public void tryAnalysis() {
 	}
+
 }

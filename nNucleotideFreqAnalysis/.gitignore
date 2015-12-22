@@ -8,3 +8,7 @@
 /GUI$1.class
 /GUI.class
 /GUI$2.class
+/GUI$NegativeInputException.class
+/GUI$FileNotFoundException.class
+/FileChooserGUI$1.class
+/FileChooserGUI.class
