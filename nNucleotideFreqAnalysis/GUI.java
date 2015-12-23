@@ -48,6 +48,7 @@ public class GUI extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public GUI() {
+		TextInput hi = new TextInput();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 150);
 		setTitle("nNFoGe Analysis Browser");
@@ -81,13 +82,11 @@ public class GUI extends JFrame implements ActionListener {
 		fileChooser.setLayout(new GridLayout(1,3));
 		JTextField textField = new JTextField("");
 		fileChooser.add(new JLabel("Choose FASTA file:"));
-		/**
-		 * TEMPORARY SETTING EDITABLE TO TRUE FOR TESTING
-		 */
 		textField.setEditable(false);
 		fileChooser.add(textField);
 		fileChooser.add(new JButton("Browse"));
 
+		
 		//Creates segmentPane, a JPanel within settingsPane for choosing what length you want the segments
 		//analysed to have
 		JPanel segmentPane = new JPanel();

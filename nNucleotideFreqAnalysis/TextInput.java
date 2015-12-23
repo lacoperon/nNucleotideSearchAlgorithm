@@ -20,22 +20,10 @@ public class TextInput {
 	private String filename;
 	
 	public TextInput() {
-		Scanner sc = new Scanner(System.in);
+		File file = new File("ExampleForeignInsert.txt");
+		System.out.println(file.length());
+		
 		BufferedReader br = null;
-		System.out.println("IMPORTING MAY TAKE A FEW MINUTES");
-		System.out.print("Enter file: ");
-		filename = sc.nextLine();
-		try {
-			fileLength = Files.size(new File(filename).toPath());
-			System.out.println(fileLength);
-		} catch (IOException e1) {
-			// Catches IOException, prints stack trace, and sets fileLength as 0 to avoid
-			// A compilation error
-			e1.printStackTrace();
-			fileLength = 0;
-		}
-		System.out.println("Importing in progress...");
-		sc.close();
 		try {
 			br = new BufferedReader(new FileReader(filename));
 			String result = "";
