@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 
 /**
  * TextInput Class, for importing nucleotide data
@@ -18,14 +20,13 @@ public class TextInput {
 	private String output;
 	private long fileLength;
 	private String filename;
+	private File file;
 	
-	public TextInput() {
-		File file = new File("ExampleForeignInsert.txt");
-		System.out.println(file.length());
-		
+	public TextInput(File file) {
+		this.file = file;
 		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new FileReader(filename));
+			br = new BufferedReader(new FileReader(file));
 			String result = "";
 			boolean keepIterating = true;
 			while (keepIterating) {
@@ -41,11 +42,13 @@ public class TextInput {
 			output = result;
 		}
 		catch (FileNotFoundException e) {
-			System.out.println("Had problem with file IO");
-			System.out.println(e.getMessage());
+			JOptionPane.showMessageDialog(null, "File not found");
 		}
 		catch (IOException e) {
 			e.printStackTrace();
+		}
+		catch (NullPointerException e) {
+			JOptionPane.showMessageDialog(null, "Choose a file first!");
 		}
 		finally {
 		}

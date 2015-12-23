@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class freqAnalysis {
 	private ArrayList<String> genomeSegments = new ArrayList<String>();
 	//Constant for the segment length
-	private static final int SEGMENT_LENGTH = 1000;
+	private int segmentLength;
 	static final int MONO = 0;
 	static final int DI = 1;
 	static final int TRI = 2;
@@ -31,23 +31,24 @@ public class freqAnalysis {
 	 * Constructor for freqAnalysis. Takes in a genome, and segments it into discrete parts.
 	 * @param genome
 	 */
-	public freqAnalysis(String genome) {
+	public freqAnalysis(String genome, int segmentLength) {
+		this.segmentLength = segmentLength;
 		this.partSegmenter(genome);
 		System.out.println("Success in segmenting");
 	}
 
 	/**
-	 * Method which segments the genome string into segments, of length SEGMENT_LENGTH
+	 * Method which segments the genome string into segments, of length segmentLength
 	 * @param genome
 	 */
 	public void partSegmenter(String genome) {
-		segmentNumber = genome.length()/SEGMENT_LENGTH;
+		segmentNumber = genome.length()/segmentLength;
 		System.out.println("There will be " + segmentNumber + " segments made from the genome");
 		int quarterNumber = segmentNumber / 4;
 		int halfNumber = segmentNumber / 2;
 		int threeQuarterNumber = 3 * segmentNumber / 4;
 		for (int i=0; i < segmentNumber; i++) {
-			genomeSegments.add(genome.substring(i*SEGMENT_LENGTH,SEGMENT_LENGTH+SEGMENT_LENGTH*i));
+			genomeSegments.add(genome.substring(i*segmentLength,segmentLength+segmentLength*i));
 			if (i == quarterNumber) {
 				System.out.println("25% Done Segmenting...");
 			}
@@ -76,7 +77,7 @@ public class freqAnalysis {
 		double[] optionCount = { 0, 0, 0, 0};
 
 		//Iterates through each segment, and calculates the A,T,C,G count from that
-		for (int i=0; i<SEGMENT_LENGTH; i++) {
+		for (int i=0; i<segmentLength; i++) {
 			String letter = segment.substring(i, i+1);
 			for(int j=0; j < option.length; j++) {
 				if(letter.equals(option[j])) {
@@ -86,7 +87,7 @@ public class freqAnalysis {
 		}
 		//Sets the jth element in the Mononucleotide Frequency ArrayList to be the option[j] percentage
 		for (int j=0; j<option.length; j++) {
-			double countDecimal = (optionCount[j])/SEGMENT_LENGTH;
+			double countDecimal = (optionCount[j])/segmentLength;
 			mono.add(j, countDecimal);
 		}
 		return mono;
@@ -104,7 +105,7 @@ public class freqAnalysis {
 			number = 0;
 		}
 		//Iterates through each segment, and calculates the count for each option from that
-		for (int i=0; i<(SEGMENT_LENGTH - DI); i++) {
+		for (int i=0; i<(segmentLength - DI); i++) {
 			String letter = segment.substring(i, i+2);
 			for(int j=0; j < option.length; j++) {
 				if(letter.equals(option[j])) {
@@ -114,7 +115,7 @@ public class freqAnalysis {
 		}
 		//Sets the jth element in the Dinucleotide Frequency ArrayList to be the option[j] percentage
 		for (int j=0; j<option.length; j++) {
-			double countDecimal = (optionCount[j])/(SEGMENT_LENGTH-DI);
+			double countDecimal = (optionCount[j])/(segmentLength-DI);
 			di.add(j, countDecimal);
 		}
 		return di;
@@ -133,7 +134,7 @@ public class freqAnalysis {
 			number = 0;
 		}
 		//Iterates through each segment, and calculates the count for each option from that
-		for (int i=0; i<(SEGMENT_LENGTH - TRI); i++) {
+		for (int i=0; i<(segmentLength - TRI); i++) {
 			String letter = segment.substring(i, i+3);
 			for(int j=0; j < option.length; j++) {
 				if(letter.equals(option[j])) {
@@ -143,7 +144,7 @@ public class freqAnalysis {
 		}
 		//Sets the jth element in the Trinucleotide Frequency ArrayList to be the option[j] percentage
 		for (int j=0; j<option.length; j++) {
-			double countDecimal = (optionCount[j])/(SEGMENT_LENGTH-TRI);
+			double countDecimal = (optionCount[j])/(segmentLength-TRI);
 			tri.add(j, countDecimal);
 		}
 		return tri;
@@ -162,7 +163,7 @@ public class freqAnalysis {
 			number = 0;
 		}
 		//Iterates through each segment, and calculates the count for each option from that
-		for (int i=0; i<(SEGMENT_LENGTH - TETRA); i++) {
+		for (int i=0; i<(segmentLength - TETRA); i++) {
 			String letter = segment.substring(i, i+4);
 			for(int j=0; j < option.length; j++) {
 				if(letter.equals(option[j])) {
@@ -172,7 +173,7 @@ public class freqAnalysis {
 		}
 		//Sets the jth element in the tetranucleotide Frequency ArrayList to be the option[j] percentage
 		for (int j=0; j<option.length; j++) {
-			double countDecimal = (optionCount[j])/(SEGMENT_LENGTH-TETRA);
+			double countDecimal = (optionCount[j])/(segmentLength-TETRA);
 			tetra.add(j, countDecimal);
 		}
 		return tetra;

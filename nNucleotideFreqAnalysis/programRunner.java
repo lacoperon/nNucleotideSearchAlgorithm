@@ -1,14 +1,16 @@
 package nNucleotideFreqAnalysis;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class programRunner {
-	public static void main(String[] args) {
+	public programRunner(File file, int segmentLength) {
 		System.out.println("Welcome to the nNucleotide Frequency Analysis Tool");
 		System.out.println("Please type in the file name you want to analyse for 'foreign' regions");
-		TextInput input = new TextInput();
+		TextInput input = new TextInput(file);
 		String genome = input.getGenome();
-		freqAnalysis freq = new freqAnalysis(genome);
+		System.out.println("Worked!");
+		freqAnalysis freq = new freqAnalysis(genome, segmentLength);
 		//MonoFreq Calculation Block
 		freq.doMonoFreqCalculations();
 		ArrayList<Double> monoAverage = freq.calculateAverageFreqs(freq.segmentedTypedFreqList.get(freqAnalysis.MONO));
@@ -56,45 +58,16 @@ public class programRunner {
 		//Now to save a segment you want to a text file
 		//TextOutput out = new TextOutput();
 		
-		System.out.println();
-		System.out.println("Now printing out suspect segments");
+		/*System.out.println();
+		System.out.println("Now printing out suspect segments"); */
 		
 		//PUT THE SEGMENT NUMBER YOU WANT TO PRINT IN HERE,
+		/*
 		int segmentNumberToPrint = 1183;
 		String segment = freq.getGenomeSegments().get(segmentNumberToPrint);
 		System.out.printf("Segment Number %d%n", segmentNumberToPrint);
 		System.out.println(segment);
-		
-		int segmentNumberToPrint1 = 1184;
-		String segment1 = freq.getGenomeSegments().get(segmentNumberToPrint1);
-		System.out.printf("Segment Number %d%n", segmentNumberToPrint1);
-		System.out.println(segment1);
-		
-		int segmentNumberToPrint2 = 1185;
-		String segment2 = freq.getGenomeSegments().get(segmentNumberToPrint2);
-		System.out.printf("Segment Number %d%n", segmentNumberToPrint2);
-		System.out.println(segment2);
-		
-		int segmentNumberToPrint3 = 1186;
-		String segment3 = freq.getGenomeSegments().get(segmentNumberToPrint3);
-		System.out.printf("Segment Number %d%n", segmentNumberToPrint3);
-		System.out.println(segment3);
-		
-		int segmentNumberToPrint4 = 1187;
-		String segment4 = freq.getGenomeSegments().get(segmentNumberToPrint4);
-		System.out.printf("Segment Number %d%n", segmentNumberToPrint4);
-		System.out.println(segment4);
-
-		int segmentNumberToPrint5 = 2501;
-		String segment5 = freq.getGenomeSegments().get(segmentNumberToPrint5);
-		System.out.printf("Segment Number %d%n", segmentNumberToPrint5);
-		System.out.println(segment5);
-		
-		int segmentNumberToPrint6 = 2503;
-		String segment6 = freq.getGenomeSegments().get(segmentNumberToPrint6);
-		System.out.printf("Segment Number %d%n", segmentNumberToPrint6);
-		System.out.println(segment6);
-
+		*/
 
 	}
 }

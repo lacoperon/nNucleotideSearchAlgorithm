@@ -29,6 +29,8 @@ public class MainGUI extends JFrame implements ActionListener {
 	private JPanel contentPane;
 	private static JTextField textField;
 	private static MainGUI frame;
+	private static File file;
+	private static int segmentNumber;
 
 	/**
 	 * The startup GUI of the nNFoGe algorithm
@@ -83,7 +85,7 @@ public class MainGUI extends JFrame implements ActionListener {
 		settingsPane.add(fileChooser);
 		fileChooser.setLayout(new GridLayout(1,3));
 		textField = new JTextField("");
-		fileChooser.add(new JLabel("Choose FASTA file:"));
+		fileChooser.add(new JLabel("Choose txt file:"));
 		textField.setEditable(false);
 		fileChooser.add(textField);
 		//Adds Browse Button
@@ -92,13 +94,9 @@ public class MainGUI extends JFrame implements ActionListener {
 		//Adds ActionListener for Browse Button
 		browseButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				FileChooserGUI fileChoose = new FileChooserGUI();
+				new FileChooserGUI();
 			}
 		});
-			
-		
-
-		
 		//Creates segmentPane, a JPanel within settingsPane for choosing what length you want the segments
 		//analysed to have
 		JPanel segmentPane = new JPanel();
@@ -109,33 +107,22 @@ public class MainGUI extends JFrame implements ActionListener {
 		segmentPane.add(segmentField);
 		segmentPane.add(new JLabel(""));
 		JButton analyseButton = new JButton("Search");
-
 		//Adds ActionListener for the interface, around the analyseButton
 		analyseButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				String segmentInput = segmentField.getText();
 				try {
-					int segmentNumber = Integer.parseInt(segmentInput);
+					segmentNumber = Integer.parseInt(segmentInput);
 					if (segmentNumber < 1) {
 						throw new NumberFormatException();
 					}
-					//TODO: Pass segmentNumber into the program
-					
-					//Checks to see if the txt file actually exists
-					//If yes, it's fine. If no, FileNotFoundException.
-					File f = new File(textField.getText());
-					if(!(f.exists()) || f.isDirectory()) { 
-					    throw new FileNotFoundException();
-					}	
+					//TODO: Pass segmentNumber into the program		
+					new programRunner(file, segmentNumber);
 				}
 				//If there is a NumberFormatException, the 
 				catch(NumberFormatException e) {
 					//Popup for non-numerical input
 					JOptionPane.showMessageDialog(null, "You entered an invalid segment length" ,
-							"Invalid Input", JOptionPane.PLAIN_MESSAGE);
-				}
-				catch(FileNotFoundException e) {
-					JOptionPane.showMessageDialog(null, "You entered an invalid file name" ,
 							"Invalid Input", JOptionPane.PLAIN_MESSAGE);
 				}
 			}
@@ -162,8 +149,9 @@ public class MainGUI extends JFrame implements ActionListener {
 	      }
 	 }
 
-	public static void setFile(String text) {
-		textField.setText(text);
-	}
+	public static void setFile(File file) {
+		textField.setText(file.getName());
+		MainGUI.file = file;
+		}
 
 }

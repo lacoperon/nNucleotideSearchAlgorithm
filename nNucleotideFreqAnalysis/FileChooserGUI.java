@@ -47,7 +47,7 @@ public class FileChooserGUI extends JFrame implements ActionListener {
 		int returnVal = fileChooser.showOpenDialog(fileChooser.getParent());
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			fileToOpen = fileChooser.getSelectedFile();
-			MainGUI.setFile(fileToOpen.getName());
+			MainGUI.setFile(fileToOpen);
 			dispose();
 		}
 	}
