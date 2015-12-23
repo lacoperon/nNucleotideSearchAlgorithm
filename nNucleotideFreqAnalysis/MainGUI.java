@@ -24,9 +24,11 @@ import javax.swing.JScrollBar;
 import javax.swing.JFileChooser;
 import javax.swing.JButton;
 
-public class GUI extends JFrame implements ActionListener {
+public class MainGUI extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
+	private static JTextField textField;
+	private static MainGUI frame;
 
 	/**
 	 * The startup GUI of the nNFoGe algorithm
@@ -35,7 +37,7 @@ public class GUI extends JFrame implements ActionListener {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GUI frame = new GUI();
+					frame = new MainGUI();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -47,8 +49,8 @@ public class GUI extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public GUI() {
-		TextInput hi = new TextInput();
+	public MainGUI() {
+		//TextInput hi = new TextInput();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 150);
 		setTitle("nNFoGe Analysis Browser");
@@ -80,11 +82,21 @@ public class GUI extends JFrame implements ActionListener {
 		JPanel fileChooser = new JPanel();
 		settingsPane.add(fileChooser);
 		fileChooser.setLayout(new GridLayout(1,3));
-		JTextField textField = new JTextField("");
+		textField = new JTextField("");
 		fileChooser.add(new JLabel("Choose FASTA file:"));
 		textField.setEditable(false);
 		fileChooser.add(textField);
-		fileChooser.add(new JButton("Browse"));
+		//Adds Browse Button
+		JButton browseButton = new JButton("Browse");
+		fileChooser.add(browseButton);
+		//Adds ActionListener for Browse Button
+		browseButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				FileChooserGUI fileChoose = new FileChooserGUI();
+			}
+		});
+			
+		
 
 		
 		//Creates segmentPane, a JPanel within settingsPane for choosing what length you want the segments
@@ -114,9 +126,7 @@ public class GUI extends JFrame implements ActionListener {
 					File f = new File(textField.getText());
 					if(!(f.exists()) || f.isDirectory()) { 
 					    throw new FileNotFoundException();
-					}
-					
-					
+					}	
 				}
 				//If there is a NumberFormatException, the 
 				catch(NumberFormatException e) {
@@ -152,7 +162,8 @@ public class GUI extends JFrame implements ActionListener {
 	      }
 	 }
 
-	public void tryAnalysis() {
+	public static void setFile(String text) {
+		textField.setText(text);
 	}
 
 }

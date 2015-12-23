@@ -21,8 +21,8 @@ public class ProgramLoadingGUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ProgramLoadingGUI frame = new ProgramLoadingGUI();
-					frame.setVisible(true);
+					//ProgramLoadingGUI frame = new ProgramLoadingGUI();
+					//frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -41,7 +41,7 @@ public class ProgramLoadingGUI extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
-		progressBar = progressBar = new JProgressBar(0, );
+		//progressBar = progressBar = new JProgressBar(0, 0);
 		
 		
 	}

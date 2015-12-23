@@ -2,6 +2,7 @@ package nNucleotideFreqAnalysis;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
@@ -46,7 +47,14 @@ public class FileChooserGUI extends JFrame implements ActionListener {
 		int returnVal = fileChooser.showOpenDialog(fileChooser.getParent());
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			fileToOpen = fileChooser.getSelectedFile();
+			MainGUI.setFile(fileToOpen.getName());
+			dispose();
 		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		//EMPTY
 	}
 
 }
